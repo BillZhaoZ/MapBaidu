@@ -3,17 +3,18 @@
 
 
 集成步骤
+    
     首先，去官网去注册,百度地图官网:http://lbsyun.baidu.com/
     拿到密钥:AppKey:http://lbsyun.baidu.com/apiconsole/key
     申请密钥的步骤具体在:http://lbsyun.baidu.com/index.php?title=android-locsdk/guide/key
     下载第三方Jar包和一些SO文件:http://lbsyun.baidu.com/index.php?title=android-locsdk/geosdk-android-download
 
 环境配置
+    
     详情见代码：
 
 
-1.地图展示
-    
+1.地图展示 
     public class MapShowActivity extends AppCompatActivity {
     
         private MapView mMapView = null;
