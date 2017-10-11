@@ -74,6 +74,7 @@ public class MapLocateActivity extends AppCompatActivity {
             if (location == null || mMapView == null) {
                 return;
             }
+
             mlocation = location;
 
             MyLocationData locData = new MyLocationData.Builder()
