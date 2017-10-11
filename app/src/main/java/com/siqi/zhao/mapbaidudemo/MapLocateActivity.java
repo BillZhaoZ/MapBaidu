@@ -1,10 +1,8 @@
 package com.siqi.zhao.mapbaidudemo;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.view.View;
-import android.widget.Toast;
+import android.widget.TextView;
 
 import com.baidu.location.BDLocation;
 import com.baidu.location.BDLocationListener;
@@ -17,16 +15,24 @@ import com.baidu.mapapi.map.MapView;
 import com.baidu.mapapi.map.MyLocationData;
 import com.baidu.mapapi.model.LatLng;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
 /**
  * 定位
  */
 public class MapLocateActivity extends AppCompatActivity {
 
+    @BindView(R.id.bmapView)
+    MapView mMapView;
+    @BindView(R.id.address)
+    TextView mAddress;
+
     // 定位相关
     LocationClient mLocClient;
     //定位监听
-    public MyLocationListenner myListener = new MyLocationListenner();
-    MapView mMapView = null;
+    public MyLocationListener myListener = new MyLocationListener();
+
     BaiduMap mBaiduMap;
     boolean isFirstLoc = true; // 是否首次定位
     BDLocation mlocation;
@@ -34,16 +40,19 @@ public class MapLocateActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_map_locate);
 
-        //获取地图控件引用
-        mMapView = (MapView) findViewById(R.id.bmapView);
+        setContentView(R.layout.activity_map_locate);
+        ButterKnife.bind(this);
+
         mBaiduMap = mMapView.getMap();
+
         // 开启定位图层
         mBaiduMap.setMyLocationEnabled(true);
+
         // 定位初始化
         mLocClient = new LocationClient(this);
         mLocClient.registerLocationListener(myListener);
+
         LocationClientOption option = new LocationClientOption();
         option.setOpenGps(true); // 打开gps
         option.setCoorType("bd09ll"); // 设置坐标类型
@@ -51,12 +60,13 @@ public class MapLocateActivity extends AppCompatActivity {
         option.setAddrType("all");
         mLocClient.setLocOption(option);
         mLocClient.start();
+
     }
 
     /**
      * 定位SDK监听函数
      */
-    public class MyLocationListenner implements BDLocationListener {
+    public class MyLocationListener implements BDLocationListener {
 
         @Override
         public void onReceiveLocation(BDLocation location) {
@@ -71,18 +81,21 @@ public class MapLocateActivity extends AppCompatActivity {
                     // 此处设置开发者获取到的方向信息，顺时针0-360
                     .direction(100).latitude(mlocation.getLatitude())
                     .longitude(mlocation.getLongitude()).build();
+
             mBaiduMap.setMyLocationData(locData);
+
             if (isFirstLoc) {
                 isFirstLoc = false;
-                LatLng ll = new LatLng(location.getLatitude(),
-                        location.getLongitude());
+                LatLng ll = new LatLng(location.getLatitude(), location.getLongitude());
                 MapStatus.Builder builder = new MapStatus.Builder();
                 builder.target(ll).zoom(18.0f);
                 mBaiduMap.animateMapStatus(MapStatusUpdateFactory.newMapStatus(builder.build()));
             }
-        }
 
-        public void onReceivePoi(BDLocation poiLocation) {
+            // 地址设置
+            mAddress.setText("维度:" + mlocation.getLatitude() + "\n"
+                    + "精度:" + mlocation.getLongitude() + "\n"
+                    + "地址:" + mlocation.getAddrStr());
         }
     }
 
@@ -104,31 +117,11 @@ public class MapLocateActivity extends AppCompatActivity {
     protected void onDestroy() {
         // 退出时销毁定位
         mLocClient.stop();
+
         // 关闭定位图层
         mBaiduMap.setMyLocationEnabled(false);
         mMapView.onDestroy();
         mMapView = null;
         super.onDestroy();
-    }
-
-    /**
-     * 发送按钮的点击事件
-     */
-    public void sendMessage(View v) {
-
-        if (mlocation == null || mMapView == null) {
-            Toast.makeText(MapLocateActivity.this, "点击了发送按钮", Toast.LENGTH_SHORT).show();
-            return;
-        }
-
-        Intent intent = new Intent();
-        //纬度
-        intent.putExtra("getLatitude", mlocation.getLatitude() + "");
-        //经度
-        intent.putExtra("getLongitude", mlocation.getLongitude() + "");
-        //地址
-        intent.putExtra("getAddress", mlocation.getAddrStr());
-        setResult(RESULT_OK, intent);
-        finish();
     }
 }

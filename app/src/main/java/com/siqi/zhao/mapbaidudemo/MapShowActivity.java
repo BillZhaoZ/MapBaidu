@@ -23,7 +23,6 @@ public class MapShowActivity extends AppCompatActivity {
 
         // 获取地图控件引用
         mMapView = (MapView) findViewById(R.id.id_bmapView);
-
         BaiduMap map = mMapView.getMap();
 
         // 普通地图
@@ -50,6 +49,7 @@ public class MapShowActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
+
         // 在activity执行onResume时执行mMapView. onResume ()，实现地图生命周期管理
         mMapView.onResume();
     }
@@ -57,6 +57,7 @@ public class MapShowActivity extends AppCompatActivity {
     @Override
     protected void onPause() {
         super.onPause();
+
         // 在activity执行onPause时执行mMapView. onPause ()，实现地图生命周期管理
         mMapView.onPause();
     }

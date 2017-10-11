@@ -9,6 +9,9 @@ import android.widget.TextView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
+/**
+ * 主页
+ */
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
     @BindView(R.id.tv_show)
@@ -32,16 +35,17 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         switch (view.getId()) {
 
+            // 地图展示
             case R.id.tv_show:
                 Intent intent = new Intent(this, MapShowActivity.class);
                 startActivity(intent);
                 break;
 
+            // 地图定位
             case R.id.tv_location:
                 Intent intent2 = new Intent(this, MapLocateActivity.class);
                 startActivity(intent2);
                 break;
-
         }
     }
 }
