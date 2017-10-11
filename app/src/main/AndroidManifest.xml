@@ -63,6 +63,10 @@
 
         <activity android:name=".MapShowActivity">
         </activity>
+
+        <activity android:name=".MapLocateActivity">
+        </activity>
+
     </application>
 
 </manifest>
