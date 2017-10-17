@@ -11,6 +11,7 @@ import butterknife.ButterKnife;
 
 /**
  * 主页
+ * 地图定位和展示
  */
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
